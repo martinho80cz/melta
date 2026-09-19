@@ -1,89 +1,438 @@
+
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MELTA Tenis 2026 - Kompletní statistiky</title>
+<title>MELTA Tenis 2026 - Výsledky a Statistiky</title>
 <style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 24px; background-color: #f8fafc; color: #1e293b; }
-  h1 { color: #0f172a; border-bottom: 3px solid #2563eb; padding-bottom: 8px; }
-  h2 { color: #1e40af; margin-top: 32px; font-size: 1.3rem; }
-  .controls { margin-bottom: 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  input[type="text"], select { padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
-  input[type="text"]:focus, select:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
-  table { width: 100%; border-collapse: collapse; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 24px; }
-  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-  th { background-color: #1e3a8a; color: #ffffff; cursor: pointer; user-select: none; font-weight: 600; }
-  th:hover { background-color: #2563eb; }
-  th::after { content: ' ↕'; opacity: 0.5; font-size: 0.8em; }
-  tr:hover { background-color: #f1f5f9; }
-  .badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #2563eb;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #0f172a;
+    --border: #e2e8f0;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.8rem;
+  }
+
+  header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+
+  /* Navigation Tabs */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .tab-btn {
+    background-color: #e2e8f0;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover {
+    background-color: #cbd5e1;
+  }
+
+  .tab-btn.active {
+    background-color: var(--primary);
+    color: white;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* Cards Grid */
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--primary-light);
+  }
+
+  .card h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.05rem;
+    color: var(--primary);
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #475569;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  input[type="text"], select {
+    padding: 9px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+  }
+
+  input[type="text"]:focus, select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+  }
+
+  /* Tables */
+  .table-wrapper {
+    overflow-x: auto;
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+
+  th, td {
+    padding: 11px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+
+  th {
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+  }
+
+  th:hover {
+    background-color: var(--primary-light);
+  }
+
+  th::after {
+    content: ' ↕';
+    opacity: 0.5;
+    font-size: 0.8em;
+  }
+
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+
+  /* Badges */
+  .badge {
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
   .badge-1 { background-color: #fef08a; color: #854d0e; }
   .badge-2 { background-color: #e2e8f0; color: #334155; }
   .badge-3 { background-color: #ffedd5; color: #9a3412; }
+
+  /* Match details */
+  .match-card {
+    background: white;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+
+  .match-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    color: var(--primary);
+  }
+
+  .match-rubber {
+    font-size: 0.88rem;
+    color: #334155;
+    padding: 3px 0;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
 </style>
 </head>
 <body>
 
-<h1>🎾 MELTA Tenis 2026 – Kompletní Statistiky Hráčů a Týmů</h1>
+<div class="container">
+  <header>
+    <h1>🎾 MELTA Tenis 2026</h1>
+    <p>Místní ELita Tenisových Amatérů – Výsledkový servis & Hráčské statistiky</p>
+  </header>
 
-<h2>🏆 Přehled Týmů (Konečné Pořadí a ZČ)</h2>
-<table id="teamsTable">
-  <thead>
-    <tr>
-      <th onclick="sortTable('teamsTable', 0, true)">Pozice</th>
-      <th onclick="sortTable('teamsTable', 1)">Tým</th>
-      <th onclick="sortTable('teamsTable', 2, true)">ZČ Výhry</th>
-      <th onclick="sortTable('teamsTable', 3, true)">ZČ Prohry</th>
-      <th onclick="sortTable('teamsTable', 4)">Dílčí Zápasy</th>
-      <th onclick="sortTable('teamsTable', 5, true)">Body ZČ</th>
-      <th onclick="sortTable('teamsTable', 6)">Play-off Výsledek</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><span class="badge badge-1">1.</span></td><td><b>TOPTENIS</b></td><td>5</td><td>2</td><td>16:5</td><td>10</td><td>🥇 Vítěz ligy</td></tr>
-    <tr><td><span class="badge badge-2">2.</span></td><td><b>ZIMÁK</b></td><td>5</td><td>2</td><td>14:7</td><td>10</td><td>🥈 Finále (2. místo)</td></tr>
-    <tr><td><span class="badge badge-3">3.</span></td><td><b>KROMĚŘÍŽ A</b></td><td>5</td><td>2</td><td>15:6</td><td>10</td><td>🥉 3. místo</td></tr>
-    <tr><td>4.</td><td>MAXMILIAN</td><td>6</td><td>1</td><td>14:7</td><td>12</td><td>4. místo (Vítěz ZČ)</td></tr>
-    <tr><td>5.</td><td>GOLDEN HITS</td><td>3</td><td>4</td><td>8:13</td><td>6</td><td>Čtvrtfinále</td></tr>
-    <tr><td>6.</td><td>YOUNG BOYS</td><td>2</td><td>5</td><td>7:14</td><td>4</td><td>Čtvrtfinále</td></tr>
-    <tr><td>7.</td><td>MORKOVICE</td><td>2</td><td>5</td><td>7:14</td><td>4</td><td>Základní část</td></tr>
-    <tr><td>8.</td><td>BŘEST</td><td>0</td><td>7</td><td>3:18</td><td>0</td><td>Základní část</td></tr>
-  </tbody>
-</table>
+  <!-- Navigation -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('tab-summary')">🏆 Přehled & Play-off</button>
+    <button class="tab-btn" onclick="switchTab('tab-standings')">📊 Základní část</button>
+    <button class="tab-btn" onclick="switchTab('tab-players')">👤 Statistiky hráčů</button>
+    <button class="tab-btn" onclick="switchTab('tab-rankings')">📈 Žebříček TOP 10</button>
+  </div>
 
-<h2>👤 Individuální Přehled Hráčů (Klikněte na záhlaví pro řazení)</h2>
-<div class="controls">
-  <input type="text" id="filterPlayer" onkeyup="filterPlayers()" placeholder="🔍 Hledat jméno hráče...">
-  <select id="filterTeam" onchange="filterPlayers()">
-    <option value="">Všechny týmy</option>
-    <option value="TOPTENIS">TOPTENIS</option>
-    <option value="ZIMÁK">ZIMÁK</option>
-    <option value="KROMĚŘÍŽ A">KROMĚŘÍŽ A</option>
-    <option value="MAXMILIAN">MAXMILIAN</option>
-    <option value="GOLDEN HITS">GOLDEN HITS</option>
-    <option value="YOUNG BOYS">YOUNG BOYS</option>
-    <option value="MORKOVICE">MORKOVICE</option>
-    <option value="BŘEST">BŘEST</option>
-  </select>
+  <!-- TAB 1: SUMMARY & PLAYOFF -->
+  <div id="tab-summary" class="tab-content active">
+    
+    <div class="grid-cards">
+      <div class="card">
+        <h3>🥇 Šampióni ročníku 2026</h3>
+        <p>Tým <b>TOPTENIS</b> prošel vyřazovacími boji bez porážky a ve finále udolal ZIMÁK 2:0 na zápasy. Klíčovým mužem byl Válek s bilancí 12:2.</p>
+      </div>
+      <div class="card">
+        <h3>👑 Nejvytíženější hráč</h3>
+        <p><b>Kalina</b> (ZIMÁK) odehrál v sezóně 18 zápasů (62,1% vytíženost) a připsal si celkem 14 výher. V žebříčku drží 1. místo (950 bodů).</p>
+      </div>
+      <div class="card">
+        <h3>🔥 Nejvyšší úspěšnost</h3>
+        <p>Dvojice <b>Macek</b> (ZIMÁK) a <b>Veselý L.</b> (KROMĚŘÍŽ A) zaznamenala skvělých <b>88,9 %</b> úspěšnosti (obě bilance 8 výher / 1 prohra).</p>
+      </div>
+    </div>
+
+    <h2>Konečné Pořadí Ročníku 2026</h2>
+    <div class="table-wrapper">
+      <table id="finalTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('finalTable', 0, true)">Pozice</th>
+            <th onclick="sortTable('finalTable', 1)">Tým</th>
+            <th onclick="sortTable('finalTable', 2)">Výsledek v Play-off</th>
+            <th onclick="sortTable('finalTable', 3)">Bilance ZČ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-1">1.</span></td><td><b>TOPTENIS</b></td><td>Vítěz ligy (Finále 2:0 vs ZIMÁK)</td><td>5-2</td></tr>
+          <tr><td><span class="badge badge-2">2.</span></td><td><b>ZIMÁK</b></td><td>2. místo (Porážka ve finále 0:2)</td><td>5-2</td></tr>
+          <tr><td><span class="badge badge-3">3.</span></td><td><b>KROMĚŘÍŽ A</b></td><td>3. místo (Výhra 2:1 vs MAXMILIAN)</td><td>5-2</td></tr>
+          <tr><td>4.</td><td>MAXMILIAN</td><td>4. místo (Vítěz základní části 6-1)</td><td>6-1</td></tr>
+          <tr><td>5.</td><td>GOLDEN HITS</td><td>Vyřazení v 1/4 finále</td><td>3-4</td></tr>
+          <tr><td>6.</td><td>YOUNG BOYS</td><td>Vyřazení v 1/4 finále</td><td>2-5</td></tr>
+          <tr><td>7.</td><td>MORKOVICE</td><td>Základní část (7. místo)</td><td>2-5</td></tr>
+          <tr><td>8.</td><td>BŘEST</td><td>Základní část (8. místo)</td><td>0-7</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Detailní Výsledky Play-off</h2>
+    
+    <div class="match-card">
+      <div class="match-header">
+        <span>🥇 FINÁLE</span>
+        <span>TOPTENIS – ZIMÁK 2:0</span>
+      </div>
+      <div class="match-rubber">• Válek, Zezulka – Kalina, Macek <b>6:1, 7:5</b></div>
+      <div class="match-rubber">• Hájek, Strachvic – Bubla Pe., Hanák <b>6:4, 5:7, 10:5</b></div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-header">
+        <span>🥉 O 3. MÍSTO</span>
+        <span>MAXMILIAN – KROMĚŘÍŽ A 1:2</span>
+      </div>
+      <div class="match-rubber">• Kolář, Matýšek – Běhal, Němček <b>6:7, 4:6</b></div>
+      <div class="match-rubber">• Honeš, Hrabalová – Jůn ml., Nahodil <b>6:3, 6:2</b></div>
+      <div class="match-rubber">• Honeš, Matýšek – Jůn ml., Němček <b>6:4, 1:6, 5:10</b></div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-header">
+        <span>🎾 SEMIFINÁLE 1</span>
+        <span>TOPTENIS – KROMĚŘÍŽ A 2:1</span>
+      </div>
+      <div class="match-rubber">• Strachvic, Válek – Nahodil, Němček <b>6:4, 6:4</b></div>
+      <div class="match-rubber">• Hájek, Zezulka – Běhal, Bezslezina <b>6:1, 6:1</b></div>
+      <div class="match-rubber">• Válek, Veselý ml. – Bezslezina, Němček <b>4:6, 5:7</b></div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-header">
+        <span>🎾 SEMIFINÁLE 2</span>
+        <span>MAXMILIAN – ZIMÁK 1:2</span>
+      </div>
+      <div class="match-rubber">• Malcher, Matýšek – Kalina, Macek <b>1:0, skreč Zimák</b></div>
+      <div class="match-rubber">• Honeš, Hrabalová – Bubla Pe., Hanák <b>6:1, 6:2</b></div>
+      <div class="match-rubber">• Honeš, Kolář – Hanák, Kalina <b>3:6, 2:6</b></div>
+    </div>
+
+  </div>
+
+  <!-- TAB 2: STANDINGS -->
+  <div id="tab-standings" class="tab-content">
+    <h2>Tabulka Základní Části (po 7. kole)</h2>
+    <div class="table-wrapper">
+      <table id="standingsTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('standingsTable', 0, true)">Pozice</th>
+            <th onclick="sortTable('standingsTable', 1)">Tým</th>
+            <th onclick="sortTable('standingsTable', 2, true)">Zápasy</th>
+            <th onclick="sortTable('standingsTable', 3, true)">Výhry</th>
+            <th onclick="sortTable('standingsTable', 4, true)">Prohry</th>
+            <th onclick="sortTable('standingsTable', 5)">Dílčí Zápasy</th>
+            <th onclick="sortTable('standingsTable', 6, true)">Rozdíl</th>
+            <th onclick="sortTable('standingsTable', 7, true)">Body</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-1">1.</span></td><td><b>MAXMILIAN</b></td><td>7</td><td>6</td><td>1</td><td>14:7</td><td>+7</td><td><b>12</b></td></tr>
+          <tr><td><span class="badge badge-2">2.</span></td><td><b>TOPTENIS</b></td><td>7</td><td>5</td><td>2</td><td>16:5</td><td>+11</td><td><b>10</b></td></tr>
+          <tr><td><span class="badge badge-3">3.</span></td><td><b>KROMĚŘÍŽ A</b></td><td>7</td><td>5</td><td>2</td><td>15:6</td><td>+9</td><td><b>10</b></td></tr>
+          <tr><td>4.</td><td>ZIMÁK</td><td>7</td><td>5</td><td>2</td><td>14:7</td><td>+7</td><td><b>10</b></td></tr>
+          <tr><td>5.</td><td>GOLDEN HITS</td><td>7</td><td>3</td><td>4</td><td>8:13</td><td>-5</td><td><b>6</b></td></tr>
+          <tr><td>6.</td><td>YOUNG BOYS</td><td>7</td><td>2</td><td>5</td><td>7:14</td><td>-7</td><td><b>4</b></td></tr>
+          <tr><td>7.</td><td>MORKOVICE</td><td>7</td><td>2</td><td>5</td><td>7:14</td><td>-7</td><td><b>4</b></td></tr>
+          <tr><td>8.</td><td>BŘEST</td><td>7</td><td>0</td><td>7</td><td>3:18</td><td>-15</td><td><b>0</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: PLAYER STATS -->
+  <div id="tab-players" class="tab-content">
+    <h2>Individuální Statistiky Hráčů (ZČ + Play-off)</h2>
+    
+    <div class="controls">
+      <input type="text" id="filterPlayer" onkeyup="filterPlayers()" placeholder="🔍 Hledat jméno hráče...">
+      <select id="filterTeam" onchange="filterPlayers()">
+        <option value="">Všechny týmy</option>
+        <option value="TOPTENIS">TOPTENIS</option>
+        <option value="ZIMÁK">ZIMÁK</option>
+        <option value="KROMĚŘÍŽ A">KROMĚŘÍŽ A</option>
+        <option value="MAXMILIAN">MAXMILIAN</option>
+        <option value="GOLDEN HITS">GOLDEN HITS</option>
+        <option value="YOUNG BOYS">YOUNG BOYS</option>
+        <option value="MORKOVICE">MORKOVICE</option>
+        <option value="BŘEST">BŘEST</option>
+      </select>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="playersTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('playersTable', 0)">Hráč</th>
+            <th onclick="sortTable('playersTable', 1)">Tým</th>
+            <th onclick="sortTable('playersTable', 2, true)">Odehráno</th>
+            <th onclick="sortTable('playersTable', 3, true)">Výhry</th>
+            <th onclick="sortTable('playersTable', 4, true)">Prohry</th>
+            <th onclick="sortTable('playersTable', 5, true)">Úspěšnost</th>
+            <th onclick="sortTable('playersTable', 6, true)">Vytíženost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamicky generováno JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: RANKINGS -->
+  <div id="tab-rankings" class="tab-content">
+    <h2>Oficiální Žebříček Hráčů TOP 10 (k 20. 09. 2026)</h2>
+    <div class="table-wrapper">
+      <table id="rankingsTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('rankingsTable', 0, true)">Pořadí</th>
+            <th onclick="sortTable('rankingsTable', 1)">Hráč</th>
+            <th onclick="sortTable('rankingsTable', 2, true)">Body</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-1">1.</span></td><td><b>Kalina</b></td><td>950</td></tr>
+          <tr><td><span class="badge badge-2">2.</span></td><td><b>Honeš</b></td><td>817</td></tr>
+          <tr><td><span class="badge badge-3">3.</span></td><td><b>Němček</b></td><td>785</td></tr>
+          <tr><td>4.</td><td>Hanák</td><td>661</td></tr>
+          <tr><td>5.</td><td>Veselý L.</td><td>646</td></tr>
+          <tr><td>6.</td><td>Macek</td><td>580</td></tr>
+          <tr><td>7.</td><td>Kolář</td><td>570</td></tr>
+          <tr><td>8.</td><td>Válek</td><td>557</td></tr>
+          <tr><td>9.</td><td>Matýšek</td><td>510</td></tr>
+          <tr><td>10.</td><td>Poláček</td><td>462</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <p>MELTA Tenis 2026 | Kontaktní e-mail: meltatenis@seznam.cz</p>
+  </footer>
 </div>
-
-<table id="playersTable">
-  <thead>
-    <tr>
-      <th onclick="sortTable('playersTable', 0)">Hráč</th>
-      <th onclick="sortTable('playersTable', 1)">Tým</th>
-      <th onclick="sortTable('playersTable', 2, true)">Odehráno</th>
-      <th onclick="sortTable('playersTable', 3, true)">Výhry</th>
-      <th onclick="sortTable('playersTable', 4, true)">Prohry</th>
-      <th onclick="sortTable('playersTable', 5, true)">Úspěšnost (%)</th>
-      <th onclick="sortTable('playersTable', 6, true)">Vytíženost (%)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Hráči se generují dynamicky -->
-  </tbody>
-</table>
 
 <script>
 const playersData = [
@@ -143,6 +492,14 @@ const playersData = [
   {name: "Zavadil K.", team: "MAXMILIAN", played: 2, wins: 0, losses: 2, win_pct: 0.0, work_pct: 6.7}
 ];
 
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
 function renderPlayers(data) {
   const tbody = document.getElementById('playersTable').tBodies[0];
   tbody.innerHTML = '';
@@ -182,8 +539,8 @@ function sortTable(tableId, colIndex, isNumeric = false) {
   table.setAttribute(`data-sort-${colIndex}`, isAsc ? 'asc' : 'desc');
 
   rows.sort((a, b) => {
-    let valA = a.cells[colIndex].innerText.replace('%', '').replace('🥇', '').replace('🥈', '').replace('🥉', '').trim();
-    let valB = b.cells[colIndex].innerText.replace('%', '').replace('🥇', '').replace('🥈', '').replace('🥉', '').trim();
+    let valA = a.cells[colIndex].innerText.replace('%', '').replace('+', '').replace('.', '').trim();
+    let valB = b.cells[colIndex].innerText.replace('%', '').replace('+', '').replace('.', '').trim();
 
     if (isNumeric) {
       valA = parseFloat(valA) || 0;
@@ -197,9 +554,8 @@ function sortTable(tableId, colIndex, isNumeric = false) {
   rows.forEach(row => tbody.appendChild(row));
 }
 
-// Inicializace
+// Inic
 renderPlayers(playersData);
 </script>
 </body>
 </html>
-
