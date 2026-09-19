@@ -1,1 +1,205 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MELTA Tenis 2026 - Kompletní statistiky</title>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 24px; background-color: #f8fafc; color: #1e293b; }
+  h1 { color: #0f172a; border-bottom: 3px solid #2563eb; padding-bottom: 8px; }
+  h2 { color: #1e40af; margin-top: 32px; font-size: 1.3rem; }
+  .controls { margin-bottom: 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  input[type="text"], select { padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+  input[type="text"]:focus, select:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+  table { width: 100%; border-collapse: collapse; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 24px; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+  th { background-color: #1e3a8a; color: #ffffff; cursor: pointer; user-select: none; font-weight: 600; }
+  th:hover { background-color: #2563eb; }
+  th::after { content: ' ↕'; opacity: 0.5; font-size: 0.8em; }
+  tr:hover { background-color: #f1f5f9; }
+  .badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+  .badge-1 { background-color: #fef08a; color: #854d0e; }
+  .badge-2 { background-color: #e2e8f0; color: #334155; }
+  .badge-3 { background-color: #ffedd5; color: #9a3412; }
+</style>
+</head>
+<body>
+
+<h1>🎾 MELTA Tenis 2026 – Kompletní Statistiky Hráčů a Týmů</h1>
+
+<h2>🏆 Přehled Týmů (Konečné Pořadí a ZČ)</h2>
+<table id="teamsTable">
+  <thead>
+    <tr>
+      <th onclick="sortTable('teamsTable', 0, true)">Pozice</th>
+      <th onclick="sortTable('teamsTable', 1)">Tým</th>
+      <th onclick="sortTable('teamsTable', 2, true)">ZČ Výhry</th>
+      <th onclick="sortTable('teamsTable', 3, true)">ZČ Prohry</th>
+      <th onclick="sortTable('teamsTable', 4)">Dílčí Zápasy</th>
+      <th onclick="sortTable('teamsTable', 5, true)">Body ZČ</th>
+      <th onclick="sortTable('teamsTable', 6)">Play-off Výsledek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="badge badge-1">1.</span></td><td><b>TOPTENIS</b></td><td>5</td><td>2</td><td>16:5</td><td>10</td><td>🥇 Vítěz ligy</td></tr>
+    <tr><td><span class="badge badge-2">2.</span></td><td><b>ZIMÁK</b></td><td>5</td><td>2</td><td>14:7</td><td>10</td><td>🥈 Finále (2. místo)</td></tr>
+    <tr><td><span class="badge badge-3">3.</span></td><td><b>KROMĚŘÍŽ A</b></td><td>5</td><td>2</td><td>15:6</td><td>10</td><td>🥉 3. místo</td></tr>
+    <tr><td>4.</td><td>MAXMILIAN</td><td>6</td><td>1</td><td>14:7</td><td>12</td><td>4. místo (Vítěz ZČ)</td></tr>
+    <tr><td>5.</td><td>GOLDEN HITS</td><td>3</td><td>4</td><td>8:13</td><td>6</td><td>Čtvrtfinále</td></tr>
+    <tr><td>6.</td><td>YOUNG BOYS</td><td>2</td><td>5</td><td>7:14</td><td>4</td><td>Čtvrtfinále</td></tr>
+    <tr><td>7.</td><td>MORKOVICE</td><td>2</td><td>5</td><td>7:14</td><td>4</td><td>Základní část</td></tr>
+    <tr><td>8.</td><td>BŘEST</td><td>0</td><td>7</td><td>3:18</td><td>0</td><td>Základní část</td></tr>
+  </tbody>
+</table>
+
+<h2>👤 Individuální Přehled Hráčů (Klikněte na záhlaví pro řazení)</h2>
+<div class="controls">
+  <input type="text" id="filterPlayer" onkeyup="filterPlayers()" placeholder="🔍 Hledat jméno hráče...">
+  <select id="filterTeam" onchange="filterPlayers()">
+    <option value="">Všechny týmy</option>
+    <option value="TOPTENIS">TOPTENIS</option>
+    <option value="ZIMÁK">ZIMÁK</option>
+    <option value="KROMĚŘÍŽ A">KROMĚŘÍŽ A</option>
+    <option value="MAXMILIAN">MAXMILIAN</option>
+    <option value="GOLDEN HITS">GOLDEN HITS</option>
+    <option value="YOUNG BOYS">YOUNG BOYS</option>
+    <option value="MORKOVICE">MORKOVICE</option>
+    <option value="BŘEST">BŘEST</option>
+  </select>
+</div>
+
+<table id="playersTable">
+  <thead>
+    <tr>
+      <th onclick="sortTable('playersTable', 0)">Hráč</th>
+      <th onclick="sortTable('playersTable', 1)">Tým</th>
+      <th onclick="sortTable('playersTable', 2, true)">Odehráno</th>
+      <th onclick="sortTable('playersTable', 3, true)">Výhry</th>
+      <th onclick="sortTable('playersTable', 4, true)">Prohry</th>
+      <th onclick="sortTable('playersTable', 5, true)">Úspěšnost (%)</th>
+      <th onclick="sortTable('playersTable', 6, true)">Vytíženost (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Hráči se generují dynamicky -->
+  </tbody>
+</table>
+
+<script>
+const playersData = [
+  {name: "Kalina", team: "ZIMÁK", played: 18, wins: 14, losses: 4, win_pct: 77.8, work_pct: 62.1},
+  {name: "Němček", team: "KROMĚŘÍŽ A", played: 17, wins: 13, losses: 4, win_pct: 76.5, work_pct: 56.7},
+  {name: "Válek", team: "TOPTENIS", played: 14, wins: 12, losses: 2, win_pct: 85.7, work_pct: 53.8},
+  {name: "Hanák", team: "ZIMÁK", played: 14, wins: 9, losses: 5, win_pct: 64.3, work_pct: 48.3},
+  {name: "Macek", team: "ZIMÁK", played: 9, wins: 8, losses: 1, win_pct: 88.9, work_pct: 31.0},
+  {name: "Veselý L.", team: "KROMĚŘÍŽ A", played: 9, wins: 8, losses: 1, win_pct: 88.9, work_pct: 30.0},
+  {name: "Strachvic", team: "TOPTENIS", played: 10, wins: 8, losses: 2, win_pct: 80.0, work_pct: 38.5},
+  {name: "Honeš", team: "MAXMILIAN", played: 13, wins: 8, losses: 5, win_pct: 61.5, work_pct: 43.3},
+  {name: "Poláček", team: "YOUNG BOYS", played: 14, wins: 7, losses: 7, win_pct: 50.0, work_pct: 58.3},
+  {name: "Bohatý", team: "KROMĚŘÍŽ A", played: 7, wins: 6, losses: 1, win_pct: 85.7, work_pct: 23.3},
+  {name: "Hájek", team: "TOPTENIS", played: 9, wins: 6, losses: 3, win_pct: 66.7, work_pct: 34.6},
+  {name: "Běhal", team: "KROMĚŘÍŽ A", played: 10, wins: 6, losses: 4, win_pct: 60.0, work_pct: 33.3},
+  {name: "Bubla Pe.", team: "ZIMÁK", played: 13, wins: 6, losses: 7, win_pct: 46.2, work_pct: 44.8},
+  {name: "Zezulka", team: "TOPTENIS", played: 6, wins: 5, losses: 1, win_pct: 83.3, work_pct: 23.1},
+  {name: "Kolář", team: "MAXMILIAN", played: 8, wins: 5, losses: 3, win_pct: 62.5, work_pct: 26.7},
+  {name: "Malcher", team: "MAXMILIAN", played: 9, wins: 5, losses: 4, win_pct: 55.6, work_pct: 30.0},
+  {name: "Bayer", team: "MORKOVICE", played: 13, wins: 5, losses: 8, win_pct: 38.5, work_pct: 61.9},
+  {name: "Hrabalová", team: "MAXMILIAN", played: 5, wins: 4, losses: 1, win_pct: 80.0, work_pct: 16.7},
+  {name: "Veselý ml.", team: "TOPTENIS", played: 5, wins: 4, losses: 1, win_pct: 80.0, work_pct: 19.2},
+  {name: "Strnad", team: "YOUNG BOYS", played: 9, wins: 4, losses: 5, win_pct: 44.4, work_pct: 37.5},
+  {name: "Homolka", team: "GOLDEN HITS", played: 13, wins: 4, losses: 9, win_pct: 30.8, work_pct: 54.2},
+  {name: "Křůmal M.", team: "MORKOVICE", played: 5, wins: 3, losses: 2, win_pct: 60.0, work_pct: 23.8},
+  {name: "Jůn ml.", team: "KROMĚŘÍŽ A", played: 6, wins: 3, losses: 3, win_pct: 50.0, work_pct: 20.0},
+  {name: "Mrňka", team: "GOLDEN HITS", played: 7, wins: 3, losses: 4, win_pct: 42.9, work_pct: 29.2},
+  {name: "Havela", team: "GOLDEN HITS", played: 7, wins: 3, losses: 4, win_pct: 42.9, work_pct: 29.2},
+  {name: "Kocourek", team: "MORKOVICE", played: 8, wins: 3, losses: 5, win_pct: 37.5, work_pct: 38.1},
+  {name: "Bezslezina", team: "KROMĚŘÍŽ A", played: 3, wins: 2, losses: 1, win_pct: 66.7, work_pct: 10.0},
+  {name: "Richter", team: "MORKOVICE", played: 3, wins: 2, losses: 1, win_pct: 66.7, work_pct: 14.3},
+  {name: "Křemeček", team: "TOPTENIS", played: 3, wins: 2, losses: 1, win_pct: 66.7, work_pct: 11.5},
+  {name: "Kavan", team: "MAXMILIAN", played: 3, wins: 2, losses: 1, win_pct: 66.7, work_pct: 10.0},
+  {name: "Kenša ml.", team: "GOLDEN HITS", played: 5, wins: 2, losses: 3, win_pct: 40.0, work_pct: 20.8},
+  {name: "Moravec", team: "GOLDEN HITS", played: 6, wins: 2, losses: 4, win_pct: 33.3, work_pct: 25.0},
+  {name: "Peštuka", team: "YOUNG BOYS", played: 8, wins: 2, losses: 6, win_pct: 25.0, work_pct: 33.3},
+  {name: "Minks", team: "GOLDEN HITS", played: 8, wins: 2, losses: 6, win_pct: 25.0, work_pct: 33.3},
+  {name: "Večerka", team: "MAXMILIAN", played: 1, wins: 1, losses: 0, win_pct: 100.0, work_pct: 3.3},
+  {name: "Veselý M.ml.", team: "TOPTENIS", played: 1, wins: 1, losses: 0, win_pct: 100.0, work_pct: 3.8},
+  {name: "Bubla Pa", team: "ZIMÁK", played: 2, wins: 1, losses: 1, win_pct: 50.0, work_pct: 6.9},
+  {name: "Dostál Pe.", team: "BŘEST", played: 2, wins: 1, losses: 1, win_pct: 50.0, work_pct: 9.5},
+  {name: "Jičínský", team: "KROMĚŘÍŽ A", played: 2, wins: 1, losses: 1, win_pct: 50.0, work_pct: 6.7},
+  {name: "Filandr", team: "BŘEST", played: 3, wins: 1, losses: 2, win_pct: 33.3, work_pct: 14.3},
+  {name: "Horáček", team: "BŘEST", played: 3, wins: 1, losses: 2, win_pct: 33.3, work_pct: 14.3},
+  {name: "Nahodil", team: "KROMĚŘÍŽ A", played: 4, wins: 1, losses: 3, win_pct: 25.0, work_pct: 13.3},
+  {name: "Zavadil M.", team: "BŘEST", played: 4, wins: 1, losses: 3, win_pct: 25.0, work_pct: 19.0},
+  {name: "Vymazal", team: "MORKOVICE", played: 5, wins: 1, losses: 4, win_pct: 20.0, work_pct: 23.8},
+  {name: "Mucha", team: "YOUNG BOYS", played: 6, wins: 1, losses: 5, win_pct: 16.7, work_pct: 25.0},
+  {name: "Dostál Z.", team: "BŘEST", played: 6, wins: 1, losses: 5, win_pct: 16.7, work_pct: 28.6},
+  {name: "Matýšek", team: "MAXMILIAN", played: 7, wins: 1, losses: 6, win_pct: 14.3, work_pct: 23.3},
+  {name: "Trčka", team: "BŘEST", played: 9, wins: 1, losses: 8, win_pct: 11.1, work_pct: 42.9},
+  {name: "Hanáček", team: "MORKOVICE", played: 6, wins: 0, losses: 6, win_pct: 0.0, work_pct: 28.6},
+  {name: "Neřád", team: "YOUNG BOYS", played: 5, wins: 0, losses: 5, win_pct: 0.0, work_pct: 20.8},
+  {name: "Dostál P.", team: "BŘEST", played: 5, wins: 0, losses: 5, win_pct: 0.0, work_pct: 23.8},
+  {name: "Dillenz", team: "YOUNG BOYS", played: 4, wins: 0, losses: 4, win_pct: 0.0, work_pct: 16.7},
+  {name: "Zavadil V.", team: "YOUNG BOYS", played: 2, wins: 0, losses: 2, win_pct: 0.0, work_pct: 8.3},
+  {name: "Zavadil K.", team: "MAXMILIAN", played: 2, wins: 0, losses: 2, win_pct: 0.0, work_pct: 6.7}
+];
+
+function renderPlayers(data) {
+  const tbody = document.getElementById('playersTable').tBodies[0];
+  tbody.innerHTML = '';
+  data.forEach(p => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><b>${p.name}</b></td>
+      <td>${p.team}</td>
+      <td>${p.played}</td>
+      <td><span style="color:#16a34a; font-weight:bold;">${p.wins}</span></td>
+      <td><span style="color:#dc2626;">${p.losses}</span></td>
+      <td><b>${p.win_pct.toFixed(1)} %</b></td>
+      <td>${p.work_pct.toFixed(1)} %</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function filterPlayers() {
+  const nameFilter = document.getElementById('filterPlayer').value.toLowerCase();
+  const teamFilter = document.getElementById('filterTeam').value;
+
+  const filtered = playersData.filter(p => {
+    const matchesName = p.name.toLowerCase().includes(nameFilter);
+    const matchesTeam = teamFilter === "" || p.team === teamFilter;
+    return matchesName && matchesTeam;
+  });
+
+  renderPlayers(filtered);
+}
+
+function sortTable(tableId, colIndex, isNumeric = false) {
+  const table = document.getElementById(tableId);
+  const tbody = table.tBodies[0];
+  const rows = Array.from(tbody.rows);
+  const isAsc = table.getAttribute(`data-sort-${colIndex}`) !== 'asc';
+  table.setAttribute(`data-sort-${colIndex}`, isAsc ? 'asc' : 'desc');
+
+  rows.sort((a, b) => {
+    let valA = a.cells[colIndex].innerText.replace('%', '').replace('🥇', '').replace('🥈', '').replace('🥉', '').trim();
+    let valB = b.cells[colIndex].innerText.replace('%', '').replace('🥇', '').replace('🥈', '').replace('🥉', '').trim();
+
+    if (isNumeric) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+      return isAsc ? valA - valB : valB - valA;
+    } else {
+      return isAsc ? valA.localeCompare(valB, 'cs') : valB.localeCompare(valA, 'cs');
+    }
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// Inicializace
+renderPlayers(playersData);
+</script>
+</body>
+</html>
 
