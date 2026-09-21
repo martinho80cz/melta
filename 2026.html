@@ -660,13 +660,50 @@
     </h2>
 
     <div class="bracket-container">
+      <!-- 1/4 Finale (Quarterfinals) -->
+      <div class="bracket-column">
+        <div class="bracket-column-title">1/4 Finále</div>
+
+        <div class="bracket-match" onclick="toggleMatchDetails(this)">
+          <div class="bracket-team winner">
+            <span>KROMĚŘÍŽ A</span>
+            <span class="score">3</span>
+          </div>
+          <div class="bracket-team">
+            <span>YOUNG BOYS</span>
+            <span class="score">0</span>
+          </div>
+          <div class="bracket-match-details">
+            • Bohatý, Jůn ml. – Peštuka, Zavadil V. <b>6:4, 6:0</b><br>
+            • Běhal, Němček – Poláček, Strnad <b>6:3, 7:6</b><br>
+            • Bohatý, Němček – Peštuka, Poláček <b>6:1, 6:2</b>
+          </div>
+        </div>
+
+        <div class="bracket-match" onclick="toggleMatchDetails(this)">
+          <div class="bracket-team winner">
+            <span>ZIMÁK</span>
+            <span class="score">3</span>
+          </div>
+          <div class="bracket-team">
+            <span>GOLDEN HITS</span>
+            <span class="score">0</span>
+          </div>
+          <div class="bracket-match-details">
+            • Kalina, Macek – Homolka, Moravec L. <b>6:2, 6:2</b><br>
+            • Bubla Pe., Hanák – Kenša ml., Mrňka <b>6:0, 6:0</b><br>
+            • Hanák, Macek – Homolka, Minks <b>6:4, 6:4</b>
+          </div>
+        </div>
+      </div>
+
       <!-- Semifinals -->
       <div class="bracket-column">
         <div class="bracket-column-title">Semifinále</div>
         
         <div class="bracket-match" onclick="toggleMatchDetails(this)">
           <div class="bracket-team winner">
-            <span>TOPTENIS</span>
+            <span>TOPTENIS <small style="font-size:0.75em; opacity:0.8;">(přímo z ZČ)</small></span>
             <span class="score">2</span>
           </div>
           <div class="bracket-team">
@@ -682,7 +719,7 @@
 
         <div class="bracket-match" onclick="toggleMatchDetails(this)">
           <div class="bracket-team">
-            <span>MAXMILIAN</span>
+            <span>MAXMILIAN <small style="font-size:0.75em; opacity:0.8;">(přímo z ZČ)</small></span>
             <span class="score">1</span>
           </div>
           <div class="bracket-team winner">
@@ -919,7 +956,7 @@ const playersData = [
   {name: "Strnad", team: "YOUNG BOYS", zc_played: 8, zc_wins: 4, zc_losses: 4, zc_win_pct: 50.0, zc_work_pct: 57.1, po_played: 1, po_wins: 0, po_losses: 1, tot_played: 9, tot_wins: 4, tot_losses: 5, tot_win_pct: 44.4},
   {name: "Homolka", team: "GOLDEN HITS", zc_played: 11, zc_wins: 4, zc_losses: 7, zc_win_pct: 36.4, zc_work_pct: 78.6, po_played: 2, po_wins: 0, po_losses: 2, tot_played: 13, tot_wins: 4, tot_losses: 9, tot_win_pct: 30.8},
   {name: "Křůmal M.", team: "MORKOVICE", zc_played: 5, zc_wins: 3, zc_losses: 2, zc_win_pct: 60.0, zc_work_pct: 35.7, po_played: 0, po_wins: 0, po_losses: 0, tot_played: 5, tot_wins: 3, tot_losses: 2, tot_win_pct: 60.0},
-  {name: "Jůn ml.", team: "KROMĚŘÍŽ A", zc_played: 3, zc_wins: 2, zc_losses: 1, zc_win_pct: 66.7, zc_work_pct: 21.4, po_played: 3, po_wins: 1, po_losses: 2, tot_played: 6, tot_wins: 3, tot_losses: 3, tot_win_pct: 50.0},
+  {name: "Jůn ml.", team: "KROMĚŘÍŽ A", zc_played: 3, zc_wins: 2, zc_losses: 1, zc_win_pct: 66.7, zc_work_pct: 21.4, po_played: 3, po_wins: 2, po_losses: 1, tot_played: 6, tot_wins: 4, tot_losses: 2, tot_win_pct: 66.7},
   {name: "Mrňka", team: "GOLDEN HITS", zc_played: 6, zc_wins: 3, zc_losses: 3, zc_win_pct: 50.0, zc_work_pct: 42.9, po_played: 1, po_wins: 0, po_losses: 1, tot_played: 7, tot_wins: 3, tot_losses: 4, tot_win_pct: 42.9},
   {name: "Havela", team: "GOLDEN HITS", zc_played: 7, zc_wins: 3, zc_losses: 4, zc_win_pct: 42.9, zc_work_pct: 50.0, po_played: 0, po_wins: 0, po_losses: 0, tot_played: 7, tot_wins: 3, tot_losses: 4, tot_win_pct: 42.9},
   {name: "Kocourek", team: "MORKOVICE", zc_played: 8, zc_wins: 3, zc_losses: 5, zc_win_pct: 37.5, zc_work_pct: 57.1, po_played: 0, po_wins: 0, po_losses: 0, tot_played: 8, tot_wins: 3, tot_losses: 5, tot_win_pct: 37.5},
